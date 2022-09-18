@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categorie;
+use App\Models\Commande;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class CategorieController extends Controller
+class CommandController extends Controller
 {
     public function index()
     {
-        $categorie = Categorie::all()->toArray();
+        $categorie = Commande::all()->toArray();
         Return array_reverse($categorie);
 
 
@@ -24,13 +24,10 @@ class CategorieController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $path = $request->file('file')->store('public/files');
-        $url=explode("/",$path);
-        $real_path="storage/$url[1]/$url[2]";
-        $save = new Categorie();
-        $save->name =$request->input(["name"]);
-        $save->image =$real_path;
-        $save->is_active = $request->get('is_active');
+        $save = new Commande();
+        $save->status =$request->input(["status"]);
+        $save->contenue =json_encode($request->input(["contenue"]));
+        $save->user_id =$request->input(["user_id"]);
         $save->save();
 
         Return response()->json($save);
@@ -39,12 +36,12 @@ class CategorieController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Categorie  $product
+     * @param  \App\Models\Commande  $product
      * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $categorie= Categorie::find($id);
+        $categorie= Commande::find($id);
 
         Return response()->json($categorie);
     }
@@ -58,7 +55,7 @@ class CategorieController extends Controller
     public function update(Request $request,$id)
     {
         $input=$request->all();
-        $product=Categorie::find($id);
+        $product=Commande::find($id);
         $product->update($input);
         $product->save();
         return response()->json($product);
@@ -67,10 +64,10 @@ class CategorieController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Categorie  $product
+     * @param  \App\Models\Commande  $product
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Categorie $product)
+    public function destroy(Commande $product)
     {
         $product->delete();
         return response()->json($product);

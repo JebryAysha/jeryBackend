@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Categorie;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,15 +15,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('commandes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            //$table->string('slug');
-            $table->string('image');
-            $table->string('parent_id');
-            $table->string('is_active');
+            $table->boolean('status');
+            $table->json('contenue');
+            $table->foreignIdFor(User::class);
             $table->timestamps();
-
         });
     }
 
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('commandes');
     }
 };

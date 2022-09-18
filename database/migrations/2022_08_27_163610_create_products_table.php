@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Categorie;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,43 +16,37 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
 
-            $table->string('code');
-            $table->string('type');
-            $table->string('barcode_symbology');
-            $table->unsignedBigInteger('brand_id');
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('unit_id');
-            $table->unsignedBigInteger('purchase_unit_id');
-            $table->unsignedBigInteger('sale_unit_id');
-            $table->double('cost');
-            $table->double('marge_detail');
-            $table->double('marge_gros');
-            $table->double('remise_detail');
-            $table->double('prix_min_detail');
-            $table->double('remise_gros');
-            $table->double('prix_min_gros');
-            $table->string('price');
-            $table->double('qty');
-            $table->double('alert_quantity');
-            $table->tinyInteger('promotion');
-            $table->string('promotion_price');
-            $table->string('starting_date');
-            $table->date('last_date');
-            $table->unsignedBigInteger('tax_id');
-            $table->unsignedBigInteger('tax_method');
-            $table->text('image');
-            $table->string('file');
-            $table->tinyInteger('is_variant');
-            $table->tinyInteger('featured');
-            $table->string('product_list');
-            $table->string('qty_list');
-            $table->string('price_list');
-            $table->text('product_details');
-            $table->tinyInteger('is_active');
-            $table->tinyInteger('is_stockable');
-            $table->double('prixgros');
+            $table->string('code')->nullable();
+            $table->string('type')->nullable();
+            $table->string('barcode_symbology')->nullable();
+            $table->foreignIdFor(Categorie::class);
+            $table->double('cost')->nullable();
+            $table->double('marge_detail')->nullable();
+            $table->double('marge_gros')->nullable();
+            $table->double('remise_detail')->nullable();
+            $table->double('prix_min_detail')->nullable();
+            $table->double('remise_gros')->nullable();
+            $table->double('prix_min_gros')->nullable();
+            $table->string('price')->nullable();
+            $table->double('qty')->nullable();
+            $table->double('alert_quantity')->nullable();
+            $table->tinyInteger('promotion')->nullable();
+            $table->string('promotion_price')->nullable();
+            $table->date('starting_date')->nullable();
+            $table->date('last_date')->nullable();
+            $table->text('image')->nullable();
+            $table->string('file')->nullable();
+            $table->tinyInteger('is_variant')->nullable();
+            $table->tinyInteger('featured')->nullable();
+            $table->string('product_list')->nullable();
+            $table->string('qty_list')->nullable();
+            $table->string('price_list')->nullable();
+            $table->text('product_details')->nullable();
+            $table->tinyInteger('is_active')->nullable();
+            $table->tinyInteger('is_stockable')->nullable();
+            $table->double('prixgros')->nullable();
             $table->timestamps();
         });
     }

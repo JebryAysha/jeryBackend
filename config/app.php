@@ -28,6 +28,9 @@ return [
     |
     */
 
+    'Unlu\Laravel\Api\ApiQueryBuilderServiceProvider',
+
+
     'env' => env('APP_ENV', 'production'),
 
     /*

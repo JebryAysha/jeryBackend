@@ -22,6 +22,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'role' => $request->input('email'),
             'password' => Hash::make($validatedData['password']),
         ]);
 
@@ -48,7 +49,11 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'access_token' => $token,
+            'token' => $token,
+            "data"=>[
+                'id' => $user["id"],
+                'role' => $user["role"],
+                ],
             'token_type' => 'Bearer',
         ]);
     }
@@ -57,6 +62,11 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return $request->user();
+    }
+    public function users()
+    {
+        $products = User::all()->toArray();
+                Return array_reverse($products);
     }
 
 

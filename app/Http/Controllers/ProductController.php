@@ -10,99 +10,55 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index()
+    public function index(Request $request ,Product $products)
     {
-        $products = Product::all()->toArray();
-        Return array_reverse($products);
-
-
+        $products=$products->newQuery();
+        if ($request->has("name")){
+        return $products->where('name',$request->get("name"))->get();
     }
+    else if ($request->has("categorie_id")){
+        return $products->where('categorie_id',$request->get("categorie_id"))->get() ;
+    }
+        return  Product::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $r
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $r)
+    public function store(Request $request)
     {
-//        $this->validate($r,[
-//            'name'=> 'request',
-//            'matric'=> 'request',
-//            'phone'=> 'request',
-//            'email'=>'request',
-//            'password'=> 'request'
-//
-//        ]);
 
+        $path = $request->file('file')->store('public/files');
+        $url=explode("/",$path);
+        $real_path="storage/$url[1]/$url[2]";
+        $save = new Product();
+        $save->image =$real_path;
+        $save->name =$request->input(["name"]);
+        $save->qty = $request->get('qty');
+        $save->price = $request->get('price');
+        $save->categorie_id = $request->get('categorie_id');
+        $save->save();
 
-
-
-
-        $article = new Product([
-            'id'   =>$r->input('id'),
-            'name' => $r->input('name'),
-            'code' => $r->input('code'),
-            'type' => $r->input('type'),
-            'barcode_symbology' => $r->input('barcode_symbology'),
-            'brand_id' => $r->input('brand_id'),
-            'category_id' => $r->input('category_id'),
-            'unit_id' => $r->input('unit_id'),
-            'purchase_unit_id' => $r->input('purchase_unit_id'),
-            'sale_unit_id' => $r->input('sale_unit_id'),
-            'cost' => $r->input('cost'),
-            'marge_detail' => $r->input('marge_detail'),
-            'marge_gros' => $r->input('marge_gros'),
-            'remise_detail' => $r->input('remise_detail'),
-            'prix_min_detail' => $r->input('prix_min_detail'),
-            'remise_gros' => $r->input('remise_gros'),
-            'prix_min_gros' => $r->input('prix_min_gros'),
-            'price' => $r->input('price'),
-            'qty' => $r->input('qty'),
-            'alert_quantity' => $r->input('alert_quantity'),
-            'promotion' => $r->input('promotion'),
-            'promotion_price' => $r->input('promotion_price'),
-            'starting_date' => $r->input('starting_date'),
-            'last_date' => $r->input('last_date'),
-            'tax_id' => $r->input('tax_id'),
-            'tax_method' => $r->input('tax_method'),
-            'image' => $r->input('image'),
-            'file' => $r->input('file'),
-            'is_variant' => $r->input('is_variant'),
-            'featured' => $r->input('featured'),
-            'product_list' => $r->input('product_list'),
-            'qty_list' => $r->input('qty_list'),
-            'price_list' => $r->input('price_list'),
-            'product_details' => $r->input('product_details'),
-            'is_active' => $r->input('is_active'),
-            'is_stockable' => $r->input('is_stockable'),
-            'prixgros' => $r->input('prixgros')
-        ]);
-        $article->save();
-        Return response()->json('Article créé !');
+        Return response()->json($save);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($idt)
+    public function show($id)
     {
-        $article= Products::find($idt);
+        $article= Product::find($id);
+
         Return response()->json($article);
     }
 
@@ -110,39 +66,26 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function edit($id)
+    public function update(Request $request,Product $product)
     {
-        $article = Products::find($id);
-
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request,$id)
-    {
-        $article = Products::find($id);
-        $article->update($request->all());
-        Return response()->json('Article MAJ !');
+        $input=$request->all();
+        $product->update($input);
+        $product->save();
+            return response()->json($product);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $article = Products::find($id);
-        $article->delete();
-        return response()->json('Article supprimé !');
+        $product->delete();
+        return response()->json($product);
     }
 
 }
