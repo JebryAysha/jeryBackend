@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 
 class CommandController extends Controller
 {
-    public function index()
+    public function index(Request $request ,Commande $commande)
     {
-        $categorie = Commande::all()->toArray();
-        Return array_reverse($categorie);
-
-
+     $commande=$commande->newQuery();
+        if ($request->has("user_id")){
+        //dd($request->get("user_id"));
+            return $commande->where('user_id',$request->get("user_id"))->get() ;
+        }
+            return  Commande::all();
     }
 
     /**

@@ -28,10 +28,13 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/me', [AuthController::class, 'me'])->middleware('auth:sanctum');
 Route::get('products/filter', [ProductController::class,"filter"]);
-Route::resource('/users', UserController::class);
+Route::get('commandes/filter', [ProductController::class,"filter"]);
 
 Route::middleware('api')->group(function () {
     Route::resource('products', ProductController::class);
+});
+Route::middleware('api')->group(function () {
+    Route::resource('/users', UserController::class);
 });
 
 

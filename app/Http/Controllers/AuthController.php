@@ -53,6 +53,8 @@ class AuthController extends Controller
             "data"=>[
                 'id' => $user["id"],
                 'role' => $user["role"],
+                'name' => $user["name"],
+                'email' => $user["email"],
                 ],
             'token_type' => 'Bearer',
         ]);

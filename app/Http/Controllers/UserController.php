@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,7 +39,7 @@ class UserController extends Controller
     public function update(Request $request,$id)
     {
         $input=$request->all();
-        $product=Product::find($id);
+        $product=User::find($id);
         $product->update($input);
         return $product;
     }
@@ -51,9 +50,10 @@ class UserController extends Controller
      * @param  \App\Models\User  $product
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(User $product)
+    public function destroy($id): JsonResponse
     {
-        $product->delete();
-        return response()->json($product);
+        $user=User::find($id);
+        $user->delete();
+        return response()->json(200);
     }
 }

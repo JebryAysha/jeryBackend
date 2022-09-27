@@ -41,9 +41,9 @@ class ProductController extends Controller
         $save = new Product();
         $save->image =$real_path;
         $save->name =$request->input(["name"]);
-        $save->qty = $request->get('qty');
-        $save->price = $request->get('price');
-        $save->categorie_id = $request->get('categorie_id');
+        $save->qty = (int)$request->get('qty');
+        $save->price =$request->get('price');
+        $save->categorie_id = (int)$request->get('categorie_id');
         $save->save();
 
         Return response()->json($save);
@@ -82,10 +82,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): \Illuminate\Http\JsonResponse
     {
         $product->delete();
-        return response()->json($product);
+        return response()->json(200);
     }
 
 }
