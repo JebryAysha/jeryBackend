@@ -27,6 +27,7 @@ class CategorieController extends Controller
         $path = $request->file('file')->store('public/files');
         $url=explode("/",$path);
         $real_path="storage/$url[1]/$url[2]";
+
         $save = new Categorie();
         $save->name =$request->input(["name"]);
         $save->image =$real_path;

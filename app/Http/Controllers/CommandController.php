@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commande;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,30 @@ class CommandController extends Controller
         //dd($request->get("user_id"));
             return $commande->where('user_id',$request->get("user_id"))->get() ;
         }
-            return  Commande::all();
+        $data=[];
+        $all=Commande::all();
+        foreach ($all as $order){
+            $id=$order['user_id'];
+            $user=User::find($id);
+            $ct=json_decode($order['contenue']);
+            $c=substr($ct,1);
+            $c=rtrim($c,"]");
+            $c=explode(",",$c);
+            $d=[];
+            foreach ($c as $value){
+                $d[]= Product::find(intval($value));
+            }
+            $count=count($d);
+            $data[]=[
+                'id'=>$order['id'],
+                'status'=>$order['status'],
+                'contenue'=>"$count",
+                'user_id'=>$user['name'],
+                'created_at'=>$order['created_at'],
+                'updated_at'=>$order['updated_at'],
+            ];
+        }
+            return  $data;
     }
 
     /**
@@ -39,13 +64,21 @@ class CommandController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Commande  $product
-     * @return \Illuminate\Http\JsonResponse
+     * @return false|string
      */
     public function show($id)
     {
-        $categorie= Commande::find($id);
+        $comande= Commande::find($id);
+        $ct=json_decode($comande['contenue']);
+        $c=substr($ct,1);
+        $c=rtrim($c,"]");
+        $c=explode(",",$c);
+        $d=[];
+        foreach ($c as $value){
+            $d[]= Product::find(intval($value));
+        }
 
-        Return response()->json($categorie);
+        Return $d;
     }
 
     /**
